@@ -33,21 +33,51 @@ body {
 }
 
 /* -- KendoUI dark theme override -- */
-.k-grid {
+/* The default Kendo theme is light. Container-level overrides are not enough:
+   the theme paints backgrounds on the individual table/cell elements, so we
+   must darken those directly (old `.k-grid td` + new `.k-table-*` class names)
+   or white text ends up on white cells (only visible on hover). */
+.k-grid,
+.k-grid-content,
+.k-grid-header,
+.k-grid-header-wrap,
+.k-grid-table,
+.k-grid .k-table {
   background: var(--bg-surface) !important;
   color: var(--text-primary) !important;
   border-color: var(--border) !important;
 }
-.k-grid-header {
-  background: var(--bg-elevated) !important;
-  border-color: var(--border-subtle) !important;
-}
-.k-grid-table tr:hover td {
-  background: var(--bg-elevated) !important;
-}
-.k-grid td {
+
+/* Body cells / rows */
+.k-grid td,
+.k-grid .k-table-td,
+.k-grid .k-table-row,
+.k-grid tr {
+  background: transparent !important;
   border-color: var(--border) !important;
   color: var(--text-primary) !important;
+}
+.k-grid .k-table-alt-row,
+.k-grid .k-table-alt-row td,
+.k-grid .k-alt td {
+  background: rgba(255, 255, 255, 0.025) !important;
+}
+
+/* Header cells */
+.k-grid-header,
+.k-grid th,
+.k-grid .k-table-th,
+.k-grid .k-header {
+  background: var(--bg-elevated) !important;
+  color: var(--text-secondary) !important;
+  border-color: var(--border-subtle) !important;
+}
+
+/* Hover */
+.k-grid .k-table-row:hover td,
+.k-grid .k-table-row:hover,
+.k-grid tr:hover td {
+  background: var(--bg-elevated) !important;
 }
 
 /* -- Scrollbar -- */

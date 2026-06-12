@@ -20,7 +20,12 @@ npm-debug.log*
 # env
 .env.local
 .env*.local
+.env
 
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Telerik/Kendo license key (personal — never commit)
+telerik-license.txt
+kendo-ui-license.txt
