@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Session Browser | ConferenceMap</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Geist:wght@400;500&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=Inter:wght@100..900&display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #0d1322;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #1f2937;
+            border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #33394a;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-error-container": "#ffdad6",
+                      "inverse-primary": "#005ac2",
+                      "outline-variant": "#424754",
+                      "on-background": "#dde2f8",
+                      "tertiary-fixed-dim": "#ffb95f",
+                      "on-tertiary": "#472a00",
+                      "tertiary": "#ffb95f",
+                      "surface-container-low": "#151b2b",
+                      "on-tertiary-fixed-variant": "#653e00",
+                      "on-primary": "#002e6a",
+                      "primary-container": "#4d8eff",
+                      "surface-tint": "#adc6ff",
+                      "tertiary-fixed": "#ffddb8",
+                      "on-tertiary-fixed": "#2a1700",
+                      "on-primary-container": "#00285d",
+                      "on-secondary-fixed": "#002113",
+                      "on-tertiary-container": "#3e2400",
+                      "inverse-on-surface": "#2a3040",
+                      "secondary-fixed-dim": "#4edea3",
+                      "surface-container-high": "#242a3a",
+                      "secondary": "#4edea3",
+                      "error-container": "#93000a",
+                      "tertiary-container": "#ca8100",
+                      "on-surface": "#dde2f8",
+                      "surface-container-highest": "#2f3445",
+                      "on-primary-fixed": "#001a42",
+                      "inverse-surface": "#dde2f8",
+                      "surface-container-lowest": "#080e1d",
+                      "surface-container": "#191f2f",
+                      "error": "#ffb4ab",
+                      "primary-fixed-dim": "#adc6ff",
+                      "on-secondary-fixed-variant": "#005236",
+                      "on-secondary": "#003824",
+                      "primary-fixed": "#d8e2ff",
+                      "secondary-fixed": "#6ffbbe",
+                      "surface": "#0d1322",
+                      "on-error": "#690005",
+                      "secondary-container": "#00a572",
+                      "surface-dim": "#0d1322",
+                      "on-secondary-container": "#00311f",
+                      "primary": "#adc6ff",
+                      "on-surface-variant": "#c2c6d6",
+                      "on-primary-fixed-variant": "#004395",
+                      "background": "#0d1322",
+                      "outline": "#8c909f",
+                      "surface-bright": "#33394a",
+                      "surface-variant": "#2f3445"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "lg": "24px",
+                      "xs": "4px",
+                      "container-max": "1440px",
+                      "base": "4px",
+                      "sidebar-width": "280px",
+                      "2xl": "48px",
+                      "md": "16px",
+                      "xl": "32px",
+                      "sm": "8px",
+                      "gutter": "16px"
+              },
+              "fontFamily": {
+                      "headline-md": ["Inter"],
+                      "body-md": ["Inter"],
+                      "headline-lg": ["Inter"],
+                      "headline-xl": ["Inter"],
+                      "label-md": ["Geist"],
+                      "body-sm": ["Inter"],
+                      "label-sm": ["Geist"],
+                      "code-md": ["Geist"],
+                      "body-lg": ["Inter"]
+              },
+              "fontSize": {
+                      "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                      "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                      "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                      "headline-xl": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                      "label-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "500" }],
+                      "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                      "label-sm": ["12px", { "lineHeight": "16px", "fontWeight": "500" }],
+                      "code-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                      "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }]
+              }
+            },
+          },
+        }
+    </script>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen overflow-hidden flex">
+<!-- Shared SideNavBar -->
+<aside class="w-[280px] h-screen fixed left-0 top-0 bg-surface dark:bg-surface border-r border-outline-variant flex flex-col py-lg px-md z-50">
+<div class="flex items-center gap-sm mb-xl">
+<div class="w-8 h-8 rounded bg-primary flex items-center justify-center">
+<span class="text-on-primary font-bold">◈</span>
+</div>
+<div>
+<h1 class="font-headline-md text-headline-md font-bold text-on-surface dark:text-on-surface">◈ ConferenceMap</h1>
+<p class="font-label-sm text-label-sm text-outline opacity-70">verified by SigMap</p>
+</div>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center gap-md p-md rounded hover:bg-surface-container-high transition-colors text-on-surface-variant dark:text-on-surface-variant" href="#">
+<span class="material-symbols-outlined">chat_bubble</span>
+<span class="font-label-md text-label-md">Ask</span>
+</a>
+<a class="flex items-center gap-md p-md rounded bg-surface-container-high text-primary dark:text-primary font-bold border-r-2 border-primary transition-all duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined">video_library</span>
+<span class="font-label-md text-label-md">Sessions</span>
+</a>
+<a class="flex items-center gap-md p-md rounded hover:bg-surface-container-high transition-colors text-on-surface-variant dark:text-on-surface-variant" href="#">
+<span class="material-symbols-outlined">calendar_today</span>
+<span class="font-label-md text-label-md">Agenda</span>
+</a>
+<a class="flex items-center gap-md p-md rounded hover:bg-surface-container-high transition-colors text-on-surface-variant dark:text-on-surface-variant" href="#">
+<span class="material-symbols-outlined">badge</span>
+<span class="font-label-md text-label-md">Organiser</span>
+</a>
+</nav>
+<div class="mt-auto pt-lg border-t border-outline-variant">
+<div class="flex items-center gap-md p-md">
+<img alt="User Profile" class="w-8 h-8 rounded-full border border-outline-variant" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB0o5Hojt00UE5HoJLPeuOCboSGaIA_cxU8tqyjq2_3z6q9rXsZ1rkFS40RJcyifuq-8ESKHrF2P6O2J49QL-spJMB64d2_c1lXTITgRngd50FdLQzlbs25amQXqHmGfrr_Fdq5r-3ZhQRsJ-UPfvFh7O0C4dqTbMWXgSaRn5rA4nmgIfLu5aBEiQgT11Pr6ebciv3U1TdaRSgI20e-WnqfA6ZDyYXV9ftiY5ubDxWWngvIbPzS5uVySByEKKHMrzBnAqjzFna-iZBB"/>
+<div>
+<p class="font-label-md text-label-md text-on-surface">Dev_Lead_01</p>
+<p class="font-label-sm text-label-sm text-outline">Premium Badge</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="ml-[280px] flex-1 h-screen flex flex-col bg-background">
+<!-- Shared TopAppBar -->
+<header class="flex justify-between items-center w-full h-16 px-lg sticky top-0 bg-background dark:bg-background z-40">
+<h2 class="font-headline-sm text-headline-sm font-black text-on-surface dark:text-on-surface">Session Browser</h2>
+<div class="flex items-center gap-lg">
+<div class="relative hidden lg:block">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-[20px]">search</span>
+<input class="bg-surface-container border-none rounded-full pl-10 pr-4 py-1.5 text-label-md font-label-md text-on-surface placeholder:text-outline w-64 focus:ring-1 focus:ring-primary transition-all" placeholder="Search sessions..." type="text"/>
+</div>
+<div class="flex items-center gap-md">
+<button class="material-symbols-outlined text-on-surface-variant hover:text-on-surface transition-opacity active:opacity-70">notifications</button>
+<button class="material-symbols-outlined text-on-surface-variant hover:text-on-surface transition-opacity active:opacity-70">settings</button>
+</div>
+</div>
+</header>
+<!-- Content Body -->
+<div class="flex-1 p-lg overflow-hidden flex flex-col gap-lg">
+<!-- AI Filter Bar -->
+<div class="w-full bg-surface-container-highest rounded-full p-1 flex items-center border border-outline-variant/30 shadow-2xl">
+<div class="flex items-center flex-1 px-lg gap-md">
+<span class="material-symbols-outlined text-primary">search_spark</span>
+<input class="bg-transparent border-none focus:ring-0 w-full text-on-surface font-body-md placeholder:text-outline/50" readonly="" type="text" value="✦ Ask: Show me AI talks after lunch..."/>
+</div>
+<button class="bg-primary text-on-primary px-lg py-2.5 rounded-full font-label-md text-label-md hover:brightness-110 active:scale-95 transition-all">
+                    Filter
+                </button>
+</div>
+<!-- Filters & Stats -->
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-sm">
+<button class="px-6 py-1.5 rounded-full bg-surface-container-high text-on-surface font-label-md text-label-md border border-outline-variant hover:border-primary transition-colors">Day 1</button>
+<button class="px-6 py-1.5 rounded-full bg-surface-container-high text-on-surface font-label-md text-label-md border border-outline-variant hover:border-primary transition-colors">Day 2</button>
+<button class="px-6 py-1.5 rounded-full bg-primary text-on-primary font-label-md text-label-md transition-colors">All</button>
+</div>
+<div class="flex items-center gap-xs">
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+<span class="font-label-md text-label-md text-outline">23 sessions found</span>
+</div>
+</div>
+<!-- KendoUI Style Data Grid -->
+<div class="flex-1 bg-surface border border-outline-variant rounded-lg overflow-hidden flex flex-col">
+<!-- Grid Header -->
+<div class="grid grid-cols-[120px_140px_1fr_180px_140px_100px_100px] bg-surface-container-low border-b border-outline-variant py-3 px-md">
+<div class="font-label-md text-label-md text-outline uppercase tracking-wider">Time</div>
+<div class="font-label-md text-label-md text-outline uppercase tracking-wider">Track</div>
+<div class="font-label-md text-label-md text-outline uppercase tracking-wider">Session Title</div>
+<div class="font-label-md text-label-md text-outline uppercase tracking-wider">Speaker</div>
+<div class="font-label-md text-label-md text-outline uppercase tracking-wider">Room</div>
+<div class="font-label-md text-label-md text-outline uppercase tracking-wider">Type</div>
+<div class="font-label-md text-label-md text-outline uppercase tracking-wider text-right">Action</div>
+</div>
+<!-- Grid Rows -->
+<div class="flex-1 overflow-y-auto custom-scrollbar">
+<!-- Row 1 (Highlighted) -->
+<div class="grid grid-cols-[120px_140px_1fr_180px_140px_100px_100px] items-center py-4 px-md bg-primary/10 border-b border-outline-variant group transition-colors">
+<div class="flex items-center gap-xs">
+<span class="font-code-md text-primary font-bold">14:00</span>
+<span class="bg-primary/20 text-primary text-[10px] px-1 rounded font-bold">D1</span>
+</div>
+<div>
+<span class="bg-primary-container text-on-primary-container text-xs px-2 py-0.5 rounded font-label-sm">React Core</span>
+</div>
+<div class="font-headline-md text-body-md font-semibold text-on-surface">The Future of Concurrent Rendering in React 19</div>
+<div class="text-on-surface-variant font-label-md">Sarah Drasner</div>
+<div class="text-on-surface-variant font-label-md">Grand Hall A</div>
+<div class="text-outline font-label-sm">Keynote</div>
+<div class="text-right">
+<button class="material-symbols-outlined text-primary hover:scale-110 transition-transform">calendar_add_on</button>
+</div>
+</div>
+<!-- Row 2 -->
+<div class="grid grid-cols-[120px_140px_1fr_180px_140px_100px_100px] items-center py-4 px-md border-b border-outline-variant bg-surface group hover:bg-surface-container-low transition-colors">
+<div class="flex items-center gap-xs">
+<span class="font-code-md text-on-surface opacity-70">14:45</span>
+<span class="bg-outline-variant text-on-surface text-[10px] px-1 rounded font-bold">D1</span>
+</div>
+<div>
+<span class="bg-tertiary-container text-on-tertiary-container text-xs px-2 py-0.5 rounded font-label-sm">AI/ML</span>
+</div>
+<div class="font-body-md text-on-surface">Prompt Engineering for Enterprise LLMs</div>
+<div class="text-on-surface-variant font-label-md">Andrej Karpathy</div>
+<div class="text-on-surface-variant font-label-md">Meeting Room 4</div>
+<div class="text-outline font-label-sm">Talk</div>
+<div class="text-right">
+<button class="material-symbols-outlined text-outline hover:text-primary transition-colors">calendar_add_on</button>
+</div>
+</div>
+<!-- Row 3 (Alt shade) -->
+<div class="grid grid-cols-[120px_140px_1fr_180px_140px_100px_100px] items-center py-4 px-md border-b border-outline-variant bg-surface-container-lowest/30 group hover:bg-surface-container-low transition-colors">
+<div class="flex items-center gap-xs">
+<span class="font-code-md text-on-surface opacity-70">15:30</span>
+<span class="bg-outline-variant text-on-surface text-[10px] px-1 rounded font-bold">D1</span>
+</div>
+<div>
+<span class="bg-secondary-container text-on-secondary-container text-xs px-2 py-0.5 rounded font-label-sm">JavaScript</span>
+</div>
+<div class="font-body-md text-on-surface">V8 Internals: How Memory Management Works</div>
+<div class="text-on-surface-variant font-label-md">Lin Clark</div>
+<div class="text-on-surface-variant font-label-md">Lab 102</div>
+<div class="text-outline font-label-sm">Workshop</div>
+<div class="text-right">
+<button class="material-symbols-outlined text-outline hover:text-primary transition-colors">calendar_add_on</button>
+</div>
+</div>
+<!-- Row 4 -->
+<div class="grid grid-cols-[120px_140px_1fr_180px_140px_100px_100px] items-center py-4 px-md border-b border-outline-variant bg-surface group hover:bg-surface-container-low transition-colors">
+<div class="flex items-center gap-xs">
+<span class="font-code-md text-on-surface opacity-70">09:00</span>
+<span class="bg-primary/40 text-on-surface text-[10px] px-1 rounded font-bold">D2</span>
+</div>
+<div>
+<span class="bg-tertiary-container text-on-tertiary-container text-xs px-2 py-0.5 rounded font-label-sm">AI/ML</span>
+</div>
+<div class="font-body-md text-on-surface">Vector Databases: The New Production Stack</div>
+<div class="text-on-surface-variant font-label-md">Harrison Chase</div>
+<div class="text-on-surface-variant font-label-md">Grand Hall B</div>
+<div class="text-outline font-label-sm">Talk</div>
+<div class="text-right">
+<button class="material-symbols-outlined text-outline hover:text-primary transition-colors">calendar_add_on</button>
+</div>
+</div>
+<!-- Row 5 (Alt shade) -->
+<div class="grid grid-cols-[120px_140px_1fr_180px_140px_100px_100px] items-center py-4 px-md border-b border-outline-variant bg-surface-container-lowest/30 group hover:bg-surface-container-low transition-colors">
+<div class="flex items-center gap-xs">
+<span class="font-code-md text-on-surface opacity-70">10:15</span>
+<span class="bg-primary/40 text-on-surface text-[10px] px-1 rounded font-bold">D2</span>
+</div>
+<div>
+<span class="bg-primary-container text-on-primary-container text-xs px-2 py-0.5 rounded font-label-sm">React Core</span>
+</div>
+<div class="font-body-md text-on-surface">Server Components in Production Environments</div>
+<div class="text-on-surface-variant font-label-md">Dan Abramov</div>
+<div class="text-on-surface-variant font-label-md">Grand Hall A</div>
+<div class="text-outline font-label-sm">Keynote</div>
+<div class="text-right">
+<button class="material-symbols-outlined text-outline hover:text-primary transition-colors">calendar_add_on</button>
+</div>
+</div>
+<!-- Row 6 -->
+<div class="grid grid-cols-[120px_140px_1fr_180px_140px_100px_100px] items-center py-4 px-md border-b border-outline-variant bg-surface group hover:bg-surface-container-low transition-colors">
+<div class="flex items-center gap-xs">
+<span class="font-code-md text-on-surface opacity-70">11:30</span>
+<span class="bg-primary/40 text-on-surface text-[10px] px-1 rounded font-bold">D2</span>
+</div>
+<div>
+<span class="bg-secondary-container text-on-secondary-container text-xs px-2 py-0.5 rounded font-label-sm">JavaScript</span>
+</div>
+<div class="font-body-md text-on-surface">WebAssembly Beyond the Browser</div>
+<div class="text-on-surface-variant font-label-md">Kevin Hoffman</div>
+<div class="text-on-surface-variant font-label-md">Meeting Room 2</div>
+<div class="text-outline font-label-sm">Talk</div>
+<div class="text-right">
+<button class="material-symbols-outlined text-outline hover:text-primary transition-colors">calendar_add_on</button>
+</div>
+</div>
+<!-- Row 7 (Alt shade) -->
+<div class="grid grid-cols-[120px_140px_1fr_180px_140px_100px_100px] items-center py-4 px-md border-b border-outline-variant bg-surface-container-lowest/30 group hover:bg-surface-container-low transition-colors">
+<div class="flex items-center gap-xs">
+<span class="font-code-md text-on-surface opacity-70">13:00</span>
+<span class="bg-outline-variant text-on-surface text-[10px] px-1 rounded font-bold">D1</span>
+</div>
+<div>
+<span class="bg-tertiary-container text-on-tertiary-container text-xs px-2 py-0.5 rounded font-label-sm">AI/ML</span>
+</div>
+<div class="font-body-md text-on-surface">Fine-tuning Open Source Models: A Guide</div>
+<div class="text-on-surface-variant font-label-md">Clem Delangue</div>
+<div class="text-on-surface-variant font-label-md">Lab 305</div>
+<div class="text-outline font-label-sm">Workshop</div>
+<div class="text-right">
+<button class="material-symbols-outlined text-outline hover:text-primary transition-colors">calendar_add_on</button>
+</div>
+</div>
+<!-- Row 8 -->
+<div class="grid grid-cols-[120px_140px_1fr_180px_140px_100px_100px] items-center py-4 px-md border-b border-outline-variant bg-surface group hover:bg-surface-container-low transition-colors">
+<div class="flex items-center gap-xs">
+<span class="font-code-md text-on-surface opacity-70">14:15</span>
+<span class="bg-primary/40 text-on-surface text-[10px] px-1 rounded font-bold">D2</span>
+</div>
+<div>
+<span class="bg-primary-container text-on-primary-container text-xs px-2 py-0.5 rounded font-label-sm">React Core</span>
+</div>
+<div class="font-body-md text-on-surface">Testing Library: Best Practices in 2024</div>
+<div class="text-on-surface-variant font-label-md">Kent C. Dodds</div>
+<div class="text-on-surface-variant font-label-md">Main Auditorium</div>
+<div class="text-outline font-label-sm">Talk</div>
+<div class="text-right">
+<button class="material-symbols-outlined text-outline hover:text-primary transition-colors">calendar_add_on</button>
+</div>
+</div>
+</div>
+<!-- Grid Footer -->
+<div class="bg-surface-container-low py-2 px-md flex items-center justify-between border-t border-outline-variant">
+<div class="flex items-center gap-md">
+<div class="flex items-center gap-xs">
+<button class="p-1 text-outline hover:text-on-surface disabled:opacity-30" disabled="">
+<span class="material-symbols-outlined text-[18px]">first_page</span>
+</button>
+<button class="p-1 text-outline hover:text-on-surface disabled:opacity-30" disabled="">
+<span class="material-symbols-outlined text-[18px]">chevron_left</span>
+</button>
+<span class="font-label-md text-on-surface mx-2">Page 1 of 3</span>
+<button class="p-1 text-outline hover:text-on-surface">
+<span class="material-symbols-outlined text-[18px]">chevron_right</span>
+</button>
+<button class="p-1 text-outline hover:text-on-surface">
+<span class="material-symbols-outlined text-[18px]">last_page</span>
+</button>
+</div>
+</div>
+<div class="flex items-center gap-sm">
+<span class="font-label-sm text-outline">Items per page:</span>
+<select class="bg-surface-container-highest border-none rounded text-label-sm font-label-sm text-on-surface py-0.5 px-2">
+<option>10</option>
+<option>20</option>
+<option>50</option>
+</select>
+</div>
+</div>
+</div>
+</div>
+<!-- Sticky FAB (Suppressed as per rules for Browse Screens) -->
+</main>
+<script>
+        // Micro-interactions for grid rows
+        const rows = document.querySelectorAll('.grid-1-row');
+        rows.forEach(row => {
+            row.addEventListener('click', () => {
+                rows.forEach(r => r.classList.remove('bg-primary/10'));
+                row.classList.add('bg-primary/10');
+            });
+        });
+
+        // AI Filter Pulse Effect
+        const aiBar = document.querySelector('.ai-filter-bar');
+        if (aiBar) {
+            setInterval(() => {
+                aiBar.style.boxShadow = '0 0 20px rgba(173, 198, 255, 0.1)';
+                setTimeout(() => {
+                    aiBar.style.boxShadow = 'none';
+                }, 1000);
+            }, 3000);
+        }
+    </script>
+</body></html>

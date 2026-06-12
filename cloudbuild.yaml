@@ -1,0 +1,36 @@
+# cloudbuild.yaml
+steps:
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - build
+      - -t
+      - europe-west4-docker.pkg.dev/$PROJECT_ID/conferencemap/app:$COMMIT_SHA
+      - .
+
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - push
+      - europe-west4-docker.pkg.dev/$PROJECT_ID/conferencemap/app:$COMMIT_SHA
+
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args:
+      - run
+      - deploy
+      - conferencemap
+      - --image=europe-west4-docker.pkg.dev/$PROJECT_ID/conferencemap/app:$COMMIT_SHA
+      - --region=europe-west4
+      - --platform=managed
+      - --allow-unauthenticated
+      - --min-instances=1
+      - --max-instances=5
+      - --memory=512Mi
+      - --cpu=1
+      - --cpu-boost
+      - --set-env-vars=GEMINI_API_KEY=$$GEMINI_API_KEY
+
+substitutions:
+  _REGION: europe-west4
+
+options:
+  logging: CLOUD_LOGGING_ONLY

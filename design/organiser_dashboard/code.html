@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ConferenceMap | Organiser Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Geist:wght@400;500&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=Inter:wght@100..900&display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            background-color: #0d1322; /* background from config */
+            color: #dde2f8; /* on-background from config */
+        }
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0d1322;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1f2937;
+            border-radius: 4px;
+        }
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+        }
+        .chart-bar-glow {
+            box-shadow: 0 0 12px rgba(77, 142, 255, 0.3);
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-error-container": "#ffdad6",
+                      "inverse-primary": "#005ac2",
+                      "outline-variant": "#424754",
+                      "on-background": "#dde2f8",
+                      "tertiary-fixed-dim": "#ffb95f",
+                      "on-tertiary": "#472a00",
+                      "tertiary": "#ffb95f",
+                      "surface-container-low": "#151b2b",
+                      "on-tertiary-fixed-variant": "#653e00",
+                      "on-primary": "#002e6a",
+                      "primary-container": "#4d8eff",
+                      "surface-tint": "#adc6ff",
+                      "tertiary-fixed": "#ffddb8",
+                      "on-tertiary-fixed": "#2a1700",
+                      "on-primary-container": "#00285d",
+                      "on-secondary-fixed": "#002113",
+                      "on-tertiary-container": "#3e2400",
+                      "inverse-on-surface": "#2a3040",
+                      "secondary-fixed-dim": "#4edea3",
+                      "surface-container-high": "#242a3a",
+                      "secondary": "#4edea3",
+                      "error-container": "#93000a",
+                      "tertiary-container": "#ca8100",
+                      "on-surface": "#dde2f8",
+                      "surface-container-highest": "#2f3445",
+                      "on-primary-fixed": "#001a42",
+                      "inverse-surface": "#dde2f8",
+                      "surface-container-lowest": "#080e1d",
+                      "surface-container": "#191f2f",
+                      "error": "#ffb4ab",
+                      "primary-fixed-dim": "#adc6ff",
+                      "on-secondary-fixed-variant": "#005236",
+                      "on-secondary": "#003824",
+                      "primary-fixed": "#d8e2ff",
+                      "secondary-fixed": "#6ffbbe",
+                      "surface": "#0d1322",
+                      "on-error": "#690005",
+                      "secondary-container": "#00a572",
+                      "surface-dim": "#0d1322",
+                      "on-secondary-container": "#00311f",
+                      "primary": "#adc6ff",
+                      "on-surface-variant": "#c2c6d6",
+                      "on-primary-fixed-variant": "#004395",
+                      "background": "#0d1322",
+                      "outline": "#8c909f",
+                      "surface-bright": "#33394a",
+                      "surface-variant": "#2f3445"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "lg": "24px",
+                      "xs": "4px",
+                      "container-max": "1440px",
+                      "base": "4px",
+                      "sidebar-width": "280px",
+                      "2xl": "48px",
+                      "md": "16px",
+                      "xl": "32px",
+                      "sm": "8px",
+                      "gutter": "16px"
+              },
+              "fontFamily": {
+                      "headline-md": ["Inter"],
+                      "body-md": ["Inter"],
+                      "headline-lg": ["Inter"],
+                      "headline-xl": ["Inter"],
+                      "label-md": ["Geist"],
+                      "body-sm": ["Inter"],
+                      "label-sm": ["Geist"],
+                      "code-md": ["Geist"],
+                      "body-lg": ["Inter"]
+              },
+              "fontSize": {
+                      "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                      "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                      "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                      "headline-xl": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "500"}],
+                      "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                      "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                      "code-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                      "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}]
+              }
+            },
+          },
+        }
+    </script>
+</head>
+<body class="overflow-hidden">
+<!-- Persistent SideNavBar -->
+<aside class="w-[280px] h-screen fixed left-0 top-0 bg-surface dark:bg-surface border-r border-outline-variant flex flex-col h-full py-lg px-md z-50">
+<div class="mb-xl flex flex-col gap-xs">
+<span class="font-headline-md text-headline-md font-bold text-on-surface dark:text-on-surface">◇ ConferenceMap</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest px-xs">verified by SigMap</span>
+</div>
+<nav class="flex flex-col gap-2">
+<a class="flex items-center gap-md px-md py-sm font-label-md text-label-md text-on-surface-variant hover:bg-surface-container-high transition-colors rounded-lg" href="#">
+<span class="material-symbols-outlined">chat_bubble</span>
+                Ask
+            </a>
+<a class="flex items-center gap-md px-md py-sm font-label-md text-label-md text-on-surface-variant hover:bg-surface-container-high transition-colors rounded-lg" href="#">
+<span class="material-symbols-outlined">video_library</span>
+                Sessions
+            </a>
+<a class="flex items-center gap-md px-md py-sm font-label-md text-label-md text-on-surface-variant hover:bg-surface-container-high transition-colors rounded-lg" href="#">
+<span class="material-symbols-outlined">calendar_today</span>
+                Agenda
+            </a>
+<a class="flex items-center gap-md px-md py-sm font-headline-md text-label-md text-primary dark:text-primary font-bold border-r-2 border-primary bg-surface-container-high rounded-lg" href="#">
+<span class="material-symbols-outlined">badge</span>
+                Organiser
+            </a>
+</nav>
+<div class="mt-auto pt-lg">
+<div class="p-md bg-surface-container-low rounded-lg border border-outline-variant flex items-center gap-md">
+<div class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center text-on-primary-container font-bold">JD</div>
+<div class="flex flex-col overflow-hidden">
+<span class="font-label-md text-label-md text-on-surface truncate">John Doe</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant truncate">Lead Curator</span>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="ml-[280px] min-h-screen bg-background">
+<!-- TopAppBar -->
+<header class="flex justify-between items-center w-full h-16 px-lg sticky top-0 bg-background z-40">
+<div class="flex items-center gap-md">
+<h1 class="font-headline-sm text-headline-sm font-black text-on-surface">Organiser Dashboard</h1>
+</div>
+<div class="flex items-center gap-lg">
+<div class="relative w-72 h-10">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-sm">search</span>
+<input class="w-full h-full bg-surface-container-highest border-none rounded-lg pl-10 pr-4 text-sm focus:ring-1 focus:ring-primary text-on-surface" placeholder="Search analytics..." type="text"/>
+</div>
+<div class="flex gap-md">
+<button class="material-symbols-outlined text-on-surface-variant hover:text-on-surface transition-opacity">notifications</button>
+<button class="material-symbols-outlined text-on-surface-variant hover:text-on-surface transition-opacity">settings</button>
+</div>
+</div>
+</header>
+<div class="p-lg overflow-y-auto max-h-[calc(100vh-64px)]">
+<div class="mb-lg">
+<p class="font-body-md text-body-md text-on-surface-variant">Real-time attendee signals · Verified by SigMap</p>
+</div>
+<!-- Bento Dashboard Grid -->
+<div class="bento-grid">
+<!-- TILE 1: KPIs -->
+<div class="bg-surface-container border border-[#1F2937] rounded-xl overflow-hidden flex flex-col">
+<div class="px-md py-sm bg-surface-container-high border-b border-[#1F2937] flex justify-between items-center">
+<span class="font-label-md text-label-md text-on-surface-variant">System Performance</span>
+<span class="material-symbols-outlined text-sm text-secondary">verified</span>
+</div>
+<div class="p-lg grid grid-cols-2 gap-lg flex-grow">
+<div class="flex flex-col gap-xs">
+<span class="text-4xl font-bold text-primary">247</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Total Queries</span>
+</div>
+<div class="flex flex-col gap-xs">
+<span class="text-4xl font-bold text-primary">97.5%</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Avg Tokens Saved</span>
+</div>
+<div class="flex flex-col gap-xs">
+<span class="text-4xl font-bold text-primary">0.8s</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Avg Latency</span>
+</div>
+<div class="flex flex-col gap-xs">
+<span class="text-4xl font-bold text-primary">96%</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Grounded Rate</span>
+</div>
+</div>
+</div>
+<!-- TILE 2: Engagement by Track -->
+<div class="bg-surface-container border border-[#1F2937] rounded-xl overflow-hidden flex flex-col">
+<div class="px-md py-sm bg-surface-container-high border-b border-[#1F2937]">
+<span class="font-label-md text-label-md text-on-surface-variant">Engagement by Track</span>
+</div>
+<div class="p-lg flex flex-col gap-lg flex-grow justify-around">
+<div class="space-y-sm">
+<div class="flex justify-between font-label-sm text-on-surface-variant">
+<span>Advanced AI & LLMs</span>
+<span>82%</span>
+</div>
+<div class="h-2 w-full bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-primary chart-bar-glow transition-all duration-1000 ease-out" style="width: 82%"></div>
+</div>
+</div>
+<div class="space-y-sm">
+<div class="flex justify-between font-label-sm text-on-surface-variant">
+<span>Edge Computing</span>
+<span>56%</span>
+</div>
+<div class="h-2 w-full bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-primary chart-bar-glow" style="width: 56%"></div>
+</div>
+</div>
+<div class="space-y-sm">
+<div class="flex justify-between font-label-sm text-on-surface-variant">
+<span>Cybersecurity Architecture</span>
+<span>41%</span>
+</div>
+<div class="h-2 w-full bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-primary chart-bar-glow" style="width: 41%"></div>
+</div>
+</div>
+<div class="space-y-sm">
+<div class="flex justify-between font-label-sm text-on-surface-variant">
+<span>DevOps & Scale</span>
+<span>68%</span>
+</div>
+<div class="h-2 w-full bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-primary chart-bar-glow" style="width: 68%"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- TILE 3: Coverage Gaps -->
+<div class="bg-surface-container border border-[#1F2937] rounded-xl overflow-hidden flex flex-col">
+<div class="px-md py-sm bg-surface-container-high border-b border-[#1F2937] flex justify-between items-center">
+<span class="font-label-md text-label-md text-on-surface-variant">⚠ Coverage Gaps</span>
+<span class="px-2 py-0.5 bg-tertiary-container text-on-tertiary-container rounded text-[10px] font-bold">12 ACTION ITEMS</span>
+</div>
+<div class="p-md flex-grow space-y-md">
+<div class="p-md bg-surface-container-low border border-outline-variant rounded-lg flex flex-col gap-sm">
+<div class="flex justify-between items-start">
+<span class="font-label-md text-label-md text-on-surface leading-tight">"Where can I find documentation on the new SigMap token standards?"</span>
+<span class="px-2 py-0.5 bg-error-container text-on-error-container text-[10px] rounded font-bold whitespace-nowrap">NO SESSION</span>
+</div>
+<div class="flex items-center gap-sm">
+<span class="px-2 py-0.5 bg-tertiary text-on-tertiary text-[10px] rounded font-bold uppercase">42 Queries</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">High Impact</span>
+</div>
+</div>
+<div class="p-md bg-surface-container-low border border-outline-variant rounded-lg flex flex-col gap-sm">
+<div class="flex justify-between items-start">
+<span class="font-label-md text-label-md text-on-surface leading-tight">"Is there a hands-on workshop for Rust-based WASM runtimes today?"</span>
+<span class="px-2 py-0.5 bg-error-container text-on-error-container text-[10px] rounded font-bold whitespace-nowrap">NO SESSION</span>
+</div>
+<div class="flex items-center gap-sm">
+<span class="px-2 py-0.5 bg-tertiary text-on-tertiary text-[10px] rounded font-bold uppercase">18 Queries</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Medium Impact</span>
+</div>
+</div>
+<div class="p-md bg-surface-container-low border border-outline-variant rounded-lg flex flex-col gap-sm opacity-60">
+<div class="flex justify-between items-start">
+<span class="font-label-md text-label-md text-on-surface leading-tight">"What are the network requirements for the hybrid cloud lab?"</span>
+<span class="px-2 py-0.5 bg-error-container text-on-error-container text-[10px] rounded font-bold whitespace-nowrap">NO SESSION</span>
+</div>
+</div>
+</div>
+</div>
+<!-- TILE 4: AI Programme Insight -->
+<div class="bg-surface-container border border-[#1F2937] rounded-xl overflow-hidden flex flex-col">
+<div class="px-md py-sm bg-surface-container-high border-b border-[#1F2937]">
+<span class="font-label-md text-label-md text-on-surface-variant">AI Programme Insight</span>
+</div>
+<div class="p-lg flex flex-col gap-lg flex-grow">
+<button class="flex items-center justify-center gap-md py-md px-lg bg-primary text-on-primary rounded-lg font-bold hover:brightness-110 active:opacity-70 transition-all" id="generateBtn">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+                            Generate Insight
+                        </button>
+<div class="relative flex-grow bg-surface-container-highest border border-outline-variant rounded-xl p-lg overflow-hidden group">
+<!-- Visual placeholder for the "insight" -->
+<div class="relative z-10 flex flex-col gap-md text-on-surface-variant font-body-sm italic opacity-50" id="insightContainer">
+                                Click the button above to synthesize real-time attendee queries into actionable programming advice.
+                            </div>
+<!-- Animated decorative element -->
+<div class="absolute -right-12 -bottom-12 w-48 h-48 bg-primary rounded-full blur-[80px] opacity-10 group-hover:opacity-20 transition-opacity"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer Details -->
+<div class="mt-lg flex justify-between items-center py-md border-t border-outline-variant">
+<div class="flex gap-lg items-center">
+<div class="flex items-center gap-xs">
+<div class="w-2 h-2 rounded-full bg-secondary"></div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Live Pipeline Active</span>
+</div>
+<span class="font-label-sm text-label-sm text-outline">Last sync: 2 minutes ago</span>
+</div>
+<div class="flex gap-md">
+<button class="px-md py-sm rounded border border-outline-variant text-label-sm text-on-surface hover:bg-surface-container transition-colors">Export CSV</button>
+<button class="px-md py-sm rounded border border-outline-variant text-label-sm text-on-surface hover:bg-surface-container transition-colors">Schedule Report</button>
+</div>
+</div>
+</div>
+</main>
+<script>
+        document.getElementById('generateBtn').addEventListener('click', function() {
+            const container = document.getElementById('insightContainer');
+            const btn = this;
+            
+            btn.disabled = true;
+            btn.innerHTML = '<span class="material-symbols-outlined animate-spin">progress_activity</span> Synthesizing...';
+            
+            setTimeout(() => {
+                container.classList.remove('opacity-50', 'italic');
+                container.innerHTML = `
+                    <div class="space-y-md animate-in fade-in duration-700">
+                        <div class="flex items-center gap-sm text-primary">
+                            <span class="material-symbols-outlined text-sm">stars</span>
+                            <span class="font-bold text-label-md">CRITICAL OPPORTUNITY</span>
+                        </div>
+                        <p class="text-on-surface text-body-md leading-relaxed">
+                            Attendees are consistently querying about <span class="text-primary font-bold">SigMap Standard 2.0</span> migration paths. 
+                            There is an unmet demand for deep-dive technical documentation which is causing "hallucination friction" in the Ask module.
+                        </p>
+                        <div class="p-sm bg-surface-container-low border-l-4 border-primary rounded">
+                            <p class="text-label-sm font-bold text-on-surface">Recommendation:</p>
+                            <p class="text-label-sm text-on-surface-variant">Host an impromptu Q&A session at 15:00 in Track 1 to cover SigMap standards.</p>
+                        </div>
+                    </div>
+                `;
+                btn.disabled = false;
+                btn.innerHTML = '<span class="material-symbols-outlined" style="font-variation-settings: \'FILL\' 1;">auto_awesome</span> Generate Insight';
+            }, 1200);
+        });
+    </script>
+</body></html>
