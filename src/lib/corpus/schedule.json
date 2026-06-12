@@ -1,0 +1,32 @@
+{
+  "event": "JSNation + React Summit 2026",
+  "venue": "Progress Amsterdam, Gedempt Hamerkanaal 231",
+  "days": [
+    {
+      "day": 1,
+      "date": "2026-06-11",
+      "label": "Thursday - Day 1",
+      "tracks": ["Main Stage", "Track B", "Workshop Room"],
+      "keyEvents": [
+        { "time": "09:00", "label": "Registration Opens" },
+        { "time": "09:30", "label": "Hackathon Kickoff" },
+        { "time": "10:00", "label": "Hacking Begins" },
+        { "time": "13:00", "label": "Lunch" },
+        { "time": "18:00", "label": "End of Day 1" }
+      ]
+    },
+    {
+      "day": 2,
+      "date": "2026-06-12",
+      "label": "Friday - Day 2",
+      "tracks": ["Main Stage", "Track B", "Workshop Room"],
+      "keyEvents": [
+        { "time": "09:00", "label": "Day 2 Opens" },
+        { "time": "12:00", "label": "Submission Deadline" },
+        { "time": "13:00", "label": "Lunch" },
+        { "time": "16:25", "label": "Pitches & Judging" },
+        { "time": "17:00", "label": "Winners Announced" }
+      ]
+    }
+  ]
+}

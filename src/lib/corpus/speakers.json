@@ -1,0 +1,92 @@
+[
+  {
+    "id": "sp001",
+    "name": "Dan Abramov",
+    "company": "Bluesky",
+    "bio": "Former React core team member. Working on Bluesky. Passionate about developer experience.",
+    "topics": ["react", "rsc", "state management", "developer tooling"],
+    "twitter": "@dan_abramov",
+    "sessions": ["s001"]
+  },
+  {
+    "id": "sp002",
+    "name": "Progress Team",
+    "company": "Progress",
+    "bio": "The KendoReact engineering team building AI-native UI components for React.",
+    "topics": ["kendoreact", "ui-components", "webmcp", "ai"],
+    "twitter": "@KendoReact",
+    "sessions": ["s002"]
+  },
+  {
+    "id": "sp003",
+    "name": "Anders Hejlsberg",
+    "company": "Microsoft",
+    "bio": "Lead architect of TypeScript and C#. Currently leading the TypeScript native compiler effort.",
+    "topics": ["typescript", "compilers", "language-design"],
+    "twitter": "@ahejlsberg",
+    "sessions": ["s003"]
+  },
+  {
+    "id": "sp004",
+    "name": "Tanner Linsley",
+    "company": "Nozzle",
+    "bio": "Creator of TanStack (React Query, React Table, React Router). Open-source maintainer.",
+    "topics": ["react", "state-management", "data-fetching", "open-source"],
+    "twitter": "@tannerlinsley",
+    "sessions": ["s004"]
+  },
+  {
+    "id": "sp005",
+    "name": "Xenova",
+    "company": "Hugging Face",
+    "bio": "Creator of transformers.js, bringing machine learning models to the browser.",
+    "topics": ["ai", "ml", "transformers", "browser"],
+    "twitter": "@xenovacom",
+    "sessions": ["s005"]
+  },
+  {
+    "id": "sp006",
+    "name": "Lee Robinson",
+    "company": "Vercel",
+    "bio": "VP of Product at Vercel. Focused on Next.js, the App Router, and the developer experience.",
+    "topics": ["nextjs", "edge", "rendering", "developer-experience"],
+    "twitter": "@leeerob",
+    "sessions": ["s006"]
+  },
+  {
+    "id": "sp007",
+    "name": "Addy Osmani",
+    "company": "Google",
+    "bio": "Engineering leader at Google Chrome. Author and advocate for web performance.",
+    "topics": ["performance", "core-web-vitals", "chrome", "optimization"],
+    "twitter": "@addyosmani",
+    "sessions": ["s007"]
+  },
+  {
+    "id": "sp008",
+    "name": "Ryan Carniato",
+    "company": "Netlify",
+    "bio": "Creator of SolidJS and pioneer of fine-grained reactivity with signals.",
+    "topics": ["javascript", "signals", "reactivity", "solidjs"],
+    "twitter": "@ryancarniato",
+    "sessions": ["s008"]
+  },
+  {
+    "id": "sp009",
+    "name": "Jared Palmer",
+    "company": "Vercel",
+    "bio": "Creator of Formik and Turborepo. Leading AI products at Vercel.",
+    "topics": ["ai", "agents", "ai-sdk", "monorepo"],
+    "twitter": "@jaredpalmer",
+    "sessions": ["s009"]
+  },
+  {
+    "id": "sp010",
+    "name": "Marcy Sutton",
+    "company": "Independent",
+    "bio": "Accessibility engineer and educator. Builds inclusive web experiences and teaches a11y.",
+    "topics": ["accessibility", "a11y", "testing", "components"],
+    "twitter": "@marcysutton",
+    "sessions": ["s010"]
+  }
+]

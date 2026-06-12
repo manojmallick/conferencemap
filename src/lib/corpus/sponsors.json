@@ -1,0 +1,42 @@
+[
+  {
+    "id": "sp_progress",
+    "name": "Progress",
+    "tier": "title",
+    "description": "Progress Software provides KendoReact, Telerik, and developer tools for building enterprise-grade UI.",
+    "products": ["KendoReact", "Telerik", "NativeScript", "Fiddler"],
+    "booth": "Hall A, Stand 1",
+    "website": "https://www.progress.com",
+    "tags": ["ui-components", "react", "developer-tools", "enterprise"]
+  },
+  {
+    "id": "sp_gitnation",
+    "name": "GitNation",
+    "tier": "host",
+    "description": "GitNation organises JSNation and React Summit, the world's leading JavaScript conferences.",
+    "products": ["JSNation", "React Summit", "GitNation Portal"],
+    "booth": "Registration Desk",
+    "website": "https://gitnation.com",
+    "tags": ["conference", "javascript", "react", "community"]
+  },
+  {
+    "id": "sp_google",
+    "name": "Google",
+    "tier": "platinum",
+    "description": "Google Cloud and the Gemini team, supporting AI-native development with Gemini 2.5 and Google Stitch.",
+    "products": ["Gemini", "Google Cloud Run", "Google Stitch", "AI Studio"],
+    "booth": "Hall A, Stand 4",
+    "website": "https://cloud.google.com",
+    "tags": ["ai", "cloud", "gemini", "developer-tools"]
+  },
+  {
+    "id": "sp_vercel",
+    "name": "Vercel",
+    "tier": "gold",
+    "description": "Vercel builds Next.js and the Frontend Cloud, with the AI SDK for building agentic applications.",
+    "products": ["Next.js", "Vercel", "AI SDK", "v0"],
+    "booth": "Hall A, Stand 7",
+    "website": "https://vercel.com",
+    "tags": ["nextjs", "deployment", "ai-sdk", "frontend"]
+  }
+]
