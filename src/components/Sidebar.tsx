@@ -9,7 +9,12 @@ const NAV = [
   { href: '/sessions', icon: '📅', label: 'Sessions' },
   { href: '/agenda', icon: '🗓️', label: 'Agenda' },
   { href: '/organiser', icon: '📊', label: 'Organiser' },
+  { href: '/judges', icon: '⚖️', label: 'For Judges' },
 ];
+
+const GITHUB_URL = 'https://github.com/manojmallick';
+const REPO_URL = 'https://github.com/manojmallick/conferencemap';
+const SIGMAP_URL = 'https://github.com/manojmallick/sigmap';
 
 export default function Sidebar() {
   const path = usePathname();
@@ -33,6 +38,17 @@ export default function Sidebar() {
         ))}
       </nav>
       <div className="sidebar-footer">
+        <div className="sidebar-links">
+          <a className="sidebar-link" href={SIGMAP_URL} target="_blank" rel="noreferrer">
+            <span className="sidebar-link-icon">✶</span> About SigMap
+          </a>
+          <a className="sidebar-link" href={REPO_URL} target="_blank" rel="noreferrer">
+            <span className="sidebar-link-icon">★</span> Source code
+          </a>
+          <a className="sidebar-link" href={GITHUB_URL} target="_blank" rel="noreferrer">
+            <span className="sidebar-link-icon">@</span> manojmallick
+          </a>
+        </div>
         <span className="footer-tag">JSNation · React Summit</span>
         <span className="footer-tag">Amsterdam 2026</span>
       </div>

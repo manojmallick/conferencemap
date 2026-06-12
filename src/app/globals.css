@@ -80,6 +80,32 @@ body {
   background: var(--bg-elevated) !important;
 }
 
+/* -- KendoReact TileLayout / Card dark override (Organiser dashboard) --
+   Same issue as the grid: the default theme paints light card/header/body
+   backgrounds, so light body text was invisible. Darken them directly. */
+.k-tilelayout {
+  background: transparent !important;
+}
+.k-tilelayout-item,
+.k-tilelayout .k-card,
+.k-card {
+  background: var(--bg-surface) !important;
+  border-color: var(--border-subtle) !important;
+  color: var(--text-primary) !important;
+}
+.k-tilelayout-item-header,
+.k-card-header {
+  background: var(--bg-elevated) !important;
+  border-color: var(--border-subtle) !important;
+  color: var(--text-primary) !important;
+  font-weight: 600;
+}
+.k-tilelayout-item-body,
+.k-card-body {
+  background: var(--bg-surface) !important;
+  color: var(--text-primary) !important;
+}
+
 /* -- Scrollbar -- */
 ::-webkit-scrollbar {
   width: 6px;
@@ -165,6 +191,31 @@ body {
 }
 .footer-tag {
   display: block;
+}
+.sidebar-links {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding-bottom: 14px;
+  margin-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+}
+.sidebar-link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: color 0.15s;
+}
+.sidebar-link:hover {
+  color: var(--accent-blue);
+}
+.sidebar-link-icon {
+  width: 14px;
+  text-align: center;
+  color: var(--accent-blue);
 }
 
 /* -- Page titles -- */
@@ -834,4 +885,141 @@ body {
   color: var(--text-primary);
   margin-top: 12px;
   white-space: pre-wrap;
+}
+
+/* -- Judge guide -- */
+.judge-page {
+  max-width: 880px;
+  padding-bottom: 48px;
+}
+.judge-header {
+  margin-bottom: 24px;
+}
+.judge-kicker {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent-blue);
+  background: rgba(59, 130, 246, 0.12);
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  border-radius: 20px;
+  padding: 4px 12px;
+  margin-bottom: 12px;
+}
+.judge-facts {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-bottom: 28px;
+}
+.judge-fact {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: 10px;
+  padding: 14px;
+}
+.judge-fact-k {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--accent-green);
+}
+.judge-fact-v {
+  font-size: 11px;
+  color: var(--text-secondary);
+  margin-top: 4px;
+  line-height: 1.4;
+}
+.judge-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.judge-step {
+  display: flex;
+  gap: 16px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-left: 3px solid var(--accent-blue);
+  border-radius: 10px;
+  padding: 18px 20px;
+}
+.judge-step-n {
+  width: 30px;
+  height: 30px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: rgba(59, 130, 246, 0.15);
+  color: var(--accent-blue);
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.judge-step-title {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 2px 0 6px;
+}
+.judge-step-text {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin: 0 0 8px;
+}
+.judge-step-proof {
+  font-size: 12px;
+  color: var(--text-primary);
+  line-height: 1.55;
+  margin: 0 0 10px;
+}
+.judge-proof-tag {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--accent-green);
+  margin-right: 6px;
+}
+.judge-try {
+  display: inline-block;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--accent-blue);
+  text-decoration: none;
+  background: rgba(59, 130, 246, 0.1);
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  border-radius: 8px;
+  padding: 6px 14px;
+  transition: all 0.15s;
+}
+.judge-try:hover {
+  background: var(--accent-blue);
+  color: #fff;
+}
+.judge-links {
+  margin-top: 28px;
+  padding-top: 18px;
+  border-top: 1px solid var(--border);
+}
+.judge-links-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+.judge-links-row {
+  display: flex;
+  gap: 18px;
+  margin-top: 10px;
+}
+.judge-links-row a {
+  font-size: 13px;
+  color: var(--accent-blue);
+  text-decoration: none;
+}
+.judge-links-row a:hover {
+  text-decoration: underline;
 }
