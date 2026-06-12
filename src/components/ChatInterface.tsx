@@ -70,6 +70,10 @@ export default function ChatInterface() {
     async (text: string) => {
       if (!text.trim() || isStreaming) return;
 
+      // Everything the attendee has already asked — sent so the server never
+      // suggests a question back that was already asked/clicked.
+      const askedBefore = messages.filter((m) => m.role === 'user').map((m) => m.text);
+
       setMessages((prev) => [...prev, { role: 'user', text }]);
       setInput('');
       setIsStreaming(true);
@@ -84,7 +88,7 @@ export default function ChatInterface() {
         const resp = await fetch('/api/query', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ query: text }),
+          body: JSON.stringify({ query: text, asked: [...askedBefore, text] }),
         });
 
         const reader = resp.body!.getReader();
@@ -170,7 +174,14 @@ export default function ChatInterface() {
         setIsStreaming(false);
       }
     },
-    [isStreaming],
+    [isStreaming, messages],
+  );
+
+  // Normalised set of everything already asked — used to filter suggestion chips
+  // so a question that's been asked/clicked never reappears.
+  const normQ = (q: string) => q.toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
+  const askedSet = new Set(
+    messages.filter((m) => m.role === 'user').map((m) => normQ(m.text)),
   );
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -195,8 +206,12 @@ export default function ChatInterface() {
           {messages.map((msg, i) => {
             const isLast = i === messages.length - 1;
             const isAnswer = msg.role === 'assistant' && !!msg.text && i !== 0;
+            // Hide any suggestion that's already been asked/clicked this session.
+            const visibleSuggestions = (msg.suggestions ?? []).filter(
+              (s) => !askedSet.has(normQ(s)),
+            );
             const showSuggestions =
-              msg.role === 'assistant' && msg.suggestions && msg.suggestions.length > 0;
+              msg.role === 'assistant' && visibleSuggestions.length > 0;
             return (
               <div key={i} className={`message message--${msg.role}`}>
                 {msg.role === 'assistant' && <div className="message-avatar">◆</div>}
@@ -247,7 +262,7 @@ export default function ChatInterface() {
                         {i === 0 ? 'Try asking' : 'Follow up'}
                       </span>
                       <div className="suggestions-chips">
-                        {msg.suggestions!.map((s) => (
+                        {visibleSuggestions.map((s) => (
                           <button
                             key={s}
                             className="suggestion-chip"

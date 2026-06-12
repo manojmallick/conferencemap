@@ -21,6 +21,30 @@ Question: ${query}
 Answer (with inline citations):`;
 }
 
+export function buildFollowUpPrompt(
+  contextText: string,
+  query: string,
+  answer: string,
+): string {
+  return `You suggest follow-up questions for a conference Q&A app.
+
+CONFERENCE CONTEXT (the only topics with verified data):
+${contextText}
+
+The attendee asked: "${query}"
+You answered: "${answer}"
+
+Suggest exactly 3 short, natural follow-up questions the attendee is likely to
+ask next. Rules:
+- Each must be answerable from the conference context above (sessions, speakers,
+  tracks, sponsors, schedule). Do not invent topics not present in the context.
+- Keep each under 9 words. Make them specific (use real names/tracks/sessions).
+- Do not repeat the question already asked.
+
+Return ONLY a JSON array of 3 strings. No markdown, no preamble.
+Example: ["When is the RSC talk?", "Who else is on the React Core track?", "Where is the Progress booth?"]`;
+}
+
 export function buildFilterPrompt(contextText: string, filterQuery: string): string {
   return `You are a session filter for a conference app.
 

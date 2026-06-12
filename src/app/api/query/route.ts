@@ -3,7 +3,7 @@ import { NextRequest } from 'next/server';
 import { getSigMapIndex } from '@/lib/sigmap/index';
 import { verifyAnswer } from '@/lib/sigmap/verify';
 import { getAI, MODEL, calcCost } from '@/lib/gemini/client';
-import { buildConferencePrompt } from '@/lib/gemini/prompts';
+import { buildConferencePrompt, buildFollowUpPrompt } from '@/lib/gemini/prompts';
 import type { QueryMetrics } from '@/lib/sigmap/types';
 
 export const runtime = 'nodejs';
@@ -14,16 +14,24 @@ function sseEvent(data: unknown): string {
   return `data: ${JSON.stringify(data)}\n\n`;
 }
 
+// Normalise a question for dedup: lowercase, strip punctuation/whitespace.
+function normQ(q: string): string {
+  return q.toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
+}
+
 // -- Follow-up suggestions derived (free, no extra LLM call) from the chunks
-//    SigMap actually used. Phrased so they tokenize back onto real corpus docs. --
+//    SigMap actually used. Phrased so they tokenize back onto real corpus docs.
+//    `exclude` holds normalised questions already asked (incl. the current one)
+//    so we never suggest something the attendee just clicked. --
 function buildFollowUps(
   chunks: { type: string; metadata: Record<string, unknown> }[],
+  exclude: Set<string> = new Set(),
 ): string[] {
   const out: string[] = [];
   const seen = new Set<string>();
   const push = (q: string) => {
-    const key = q.toLowerCase();
-    if (q && !seen.has(key) && out.length < 3) {
+    const key = normQ(q);
+    if (q && !seen.has(key) && !exclude.has(key) && out.length < 3) {
       seen.add(key);
       out.push(q);
     }
@@ -55,9 +63,47 @@ function buildFollowUps(
   return out.slice(0, 3);
 }
 
+// LLM-generated follow-ups (toggle via LLM_FOLLOWUPS, on by default). Natural
+// phrasing at the cost of one small extra call; always falls back to the
+// deterministic templates on any error or unparseable output.
+async function buildFollowUpsLLM(
+  contextText: string,
+  query: string,
+  answer: string,
+  fallback: string[],
+): Promise<string[]> {
+  try {
+    const resp = await getAI().models.generateContent({
+      model: MODEL,
+      contents: [
+        { role: 'user', parts: [{ text: buildFollowUpPrompt(contextText, query, answer) }] },
+      ],
+      config: { temperature: 0.4, maxOutputTokens: 200, thinkingConfig: { thinkingBudget: 0 } },
+    });
+    const raw = (resp.text ?? '').trim().replace(/^```(?:json)?|```$/g, '').trim();
+    const parsed = JSON.parse(raw);
+    if (Array.isArray(parsed)) {
+      const items = parsed
+        .filter((x): x is string => typeof x === 'string' && x.trim().length > 0)
+        .map((x) => x.trim())
+        .slice(0, 3);
+      if (items.length > 0) return items;
+    }
+  } catch (e) {
+    console.warn('[followups] LLM generation failed, using templates:', e);
+  }
+  return fallback;
+}
+
 // -- Main Route Handler --
 export async function POST(req: NextRequest) {
-  const { query } = (await req.json()) as { query: string };
+  const { query, asked } = (await req.json()) as { query: string; asked?: string[] };
+
+  // Questions already asked this session (+ the current one) — never suggested back.
+  const excludeQuestions = new Set<string>([
+    normQ(query ?? ''),
+    ...(Array.isArray(asked) ? asked.map(normQ) : []),
+  ]);
 
   if (!query?.trim()) {
     return new Response(sseEvent({ type: 'error', message: 'Empty query' }), {
@@ -205,7 +251,23 @@ export async function POST(req: NextRequest) {
         };
 
         send({ type: 'final_metrics', metrics });
-        send({ type: 'suggestions', items: buildFollowUps(ctx.chunks) });
+
+        // Follow-up suggestions: LLM-generated when enabled (default), else the
+        // instant deterministic templates. Streamed last so they never block
+        // the answer itself.
+        const templateFollowUps = buildFollowUps(ctx.chunks, excludeQuestions);
+        const useLLM = process.env.LLM_FOLLOWUPS !== 'false';
+        let followUps = useLLM
+          ? await buildFollowUpsLLM(contextText, query, fullAnswer, templateFollowUps)
+          : templateFollowUps;
+        // Final guard: drop anything already asked (the LLM occasionally echoes
+        // the question back despite the prompt), then top up from templates.
+        followUps = followUps.filter((q) => !excludeQuestions.has(normQ(q)));
+        for (const t of templateFollowUps) {
+          if (followUps.length >= 3) break;
+          if (!followUps.some((q) => normQ(q) === normQ(t))) followUps.push(t);
+        }
+        send({ type: 'suggestions', items: followUps.slice(0, 3) });
         send({ type: 'done' });
       } catch (err: unknown) {
         console.error('[/api/query]', err);
