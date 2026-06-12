@@ -1,0 +1,30 @@
+# .gcloudignore — controls what `gcloud run deploy --source` uploads to Cloud Build.
+# When this file exists, gcloud uses it INSTEAD of .gitignore. We deliberately do
+# NOT ignore telerik-license.txt here so the KendoReact license is present during
+# the cloud Docker build (the Dockerfile's `npm run build` reads it to remove the
+# watermark). Secrets (.env*) are still excluded — GEMINI_API_KEY is injected at
+# deploy time via --env-vars-file, never baked into the image.
+
+.git/
+node_modules/
+.next/
+out/
+build/
+
+# secrets — never upload
+.env
+.env.local
+.env*.local
+
+# local junk
+.DS_Store
+npm-debug.log*
+*.tsbuildinfo
+next-env.d.ts
+
+# heavy / unnecessary for the build
+design/
+*.pdf
+architecture.png
+
+# NOTE: telerik-license.txt is intentionally NOT listed — it must be uploaded.

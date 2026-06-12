@@ -13,6 +13,9 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 ENV NEXT_TELEMETRY_DISABLED=1
+# Activate the KendoReact license if present (telerik-license.txt is uploaded via
+# .gcloudignore). Non-fatal: the build still succeeds (with watermark) if absent.
+RUN npx --yes kendo-ui-license activate || echo "[kendo] no license — building with watermark"
 RUN npm run build
 
 # Stage 3: Production runtime (smallest possible)
