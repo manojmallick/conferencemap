@@ -254,6 +254,119 @@ body {
   border-color: rgba(59, 130, 246, 0.3);
 }
 
+/* -- Answer styling -- */
+.message-text--answer {
+  background: linear-gradient(180deg, rgba(16, 185, 129, 0.06), var(--bg-surface) 60%);
+  border-color: rgba(16, 185, 129, 0.25);
+  border-left: 3px solid var(--accent-green);
+  padding-top: 10px;
+}
+.message-text--nocontext {
+  background: linear-gradient(180deg, rgba(245, 158, 11, 0.06), var(--bg-surface) 60%);
+  border-color: rgba(245, 158, 11, 0.25);
+  border-left: 3px solid var(--accent-amber);
+}
+.answer-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--accent-green);
+  margin-bottom: 8px;
+}
+.answer-badge--decline {
+  color: var(--accent-amber);
+}
+.answer-badge-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: currentColor;
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.18);
+}
+.answer-badge--decline .answer-badge-dot {
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.18);
+}
+.answer-prose {
+  font-size: 14px;
+  line-height: 1.65;
+}
+
+/* -- Inline citation chips -- */
+.cite-group {
+  white-space: nowrap;
+}
+.cite-chip {
+  font-size: 9px;
+  line-height: 1;
+  vertical-align: super;
+  font-family: monospace;
+  color: var(--accent-blue);
+  background: rgba(59, 130, 246, 0.12);
+  border: 1px solid rgba(59, 130, 246, 0.35);
+  border-radius: 4px;
+  padding: 1px 4px;
+  margin-left: 2px;
+  cursor: default;
+}
+
+/* -- Suggestion / follow-up chips -- */
+.suggestions {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 2px;
+}
+.suggestions-label {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+.suggestions-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.suggestion-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: 18px;
+  padding: 7px 14px;
+  font-size: 13px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-align: left;
+}
+.suggestion-chip:hover:not(:disabled) {
+  background: rgba(59, 130, 246, 0.12);
+  border-color: var(--accent-blue);
+  color: var(--text-primary);
+}
+.suggestion-chip:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+.suggestion-chip-arrow {
+  color: var(--accent-blue);
+  font-size: 12px;
+  opacity: 0;
+  transform: translateX(-4px);
+  transition: all 0.15s;
+}
+.suggestion-chip:hover:not(:disabled) .suggestion-chip-arrow {
+  opacity: 1;
+  transform: translateX(0);
+}
+
 .chat-input-bar {
   display: flex;
   gap: 8px;

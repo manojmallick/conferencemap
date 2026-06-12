@@ -14,6 +14,47 @@ function sseEvent(data: unknown): string {
   return `data: ${JSON.stringify(data)}\n\n`;
 }
 
+// -- Follow-up suggestions derived (free, no extra LLM call) from the chunks
+//    SigMap actually used. Phrased so they tokenize back onto real corpus docs. --
+function buildFollowUps(
+  chunks: { type: string; metadata: Record<string, unknown> }[],
+): string[] {
+  const out: string[] = [];
+  const seen = new Set<string>();
+  const push = (q: string) => {
+    const key = q.toLowerCase();
+    if (q && !seen.has(key) && out.length < 3) {
+      seen.add(key);
+      out.push(q);
+    }
+  };
+
+  // Prefer one speaker, one track, one sponsor — variety over repetition.
+  for (const c of chunks) {
+    const m = c.metadata as Record<string, any>;
+    if (c.type === 'speaker' && m?.name && m.name !== 'Progress Team') {
+      push(`What is ${m.name} speaking about?`);
+    }
+  }
+  for (const c of chunks) {
+    const m = c.metadata as Record<string, any>;
+    if (c.type === 'session' && m?.track) {
+      push(`What other ${m.track} sessions are there?`);
+    }
+  }
+  for (const c of chunks) {
+    const m = c.metadata as Record<string, any>;
+    if (c.type === 'sponsor' && m?.name) {
+      push(`Where can I find ${m.name} at the venue?`);
+    }
+  }
+
+  // Generic fallbacks so there are always at least a couple.
+  push('What workshops are on Day 2?');
+  push('When does the hackathon finish?');
+  return out.slice(0, 3);
+}
+
 // -- Main Route Handler --
 export async function POST(req: NextRequest) {
   const { query } = (await req.json()) as { query: string };
@@ -164,6 +205,7 @@ export async function POST(req: NextRequest) {
         };
 
         send({ type: 'final_metrics', metrics });
+        send({ type: 'suggestions', items: buildFollowUps(ctx.chunks) });
         send({ type: 'done' });
       } catch (err: unknown) {
         console.error('[/api/query]', err);

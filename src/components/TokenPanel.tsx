@@ -14,26 +14,36 @@ interface Props {
 export default function TokenPanel({ preflight, firstToken, metrics, isStreaming }: Props) {
   const [animReduction, setAnimReduction] = useState(0);
 
-  // Animate reduction bar when preflight arrives
+  const sig = metrics?.sigmap ?? preflight?.sigmap;
+  const gem = metrics?.gemini;
+
+  // The "actual" input shown is the real prompt sent to Gemini once we have it,
+  // otherwise SigMap's assembled estimate. Base the savings % on whatever number
+  // is actually displayed so the bar and the "→ N" value always agree.
+  const actualInput = gem?.promptTokenCount ?? sig?.assembledTokens ?? 0;
+  const naiveInput = sig?.naiveTokens ?? 0;
+  const targetReduction =
+    naiveInput > 0 ? Math.max(0, Math.round((1 - actualInput / naiveInput) * 100)) : 0;
+
+  // Animate the savings bar toward the target — works for both the live message
+  // (preflight) and re-rendered historical messages (metrics), so stored answers
+  // no longer reset to 0%.
   useEffect(() => {
-    if (!preflight) {
+    if (targetReduction <= 0) {
       setAnimReduction(0);
       return;
     }
-    const target = preflight.sigmap.reductionPercent;
     let cur = 0;
     const id = setInterval(() => {
-      cur = Math.min(cur + 3, target);
+      cur = Math.min(cur + 3, targetReduction);
       setAnimReduction(cur);
-      if (cur >= target) clearInterval(id);
+      if (cur >= targetReduction) clearInterval(id);
     }, 12);
     return () => clearInterval(id);
-  }, [preflight]);
+  }, [targetReduction]);
 
   if (!preflight && !metrics) return null;
 
-  const sig = metrics?.sigmap ?? preflight?.sigmap;
-  const gem = metrics?.gemini;
   const faith = metrics?.faithfulness;
   const cost = metrics?.cost;
   const ft = metrics
