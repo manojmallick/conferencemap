@@ -67,6 +67,55 @@ npm run dev                  # http://localhost:3000
 | `GEMINI_API_KEY` | — | Gemini API key (starts with `AIza`) |
 | `LLM_FOLLOWUPS` | `true` | `true` = Gemini-generated follow-ups; `false` = instant templates |
 
+## Scripts
+
+| Command | What it does |
+|---|---|
+| `npm run dev` | Dev server on `http://localhost:3000` |
+| `npm run build` / `npm start` | Production build and server |
+| `npm run lint` | Next.js lint |
+| `npm run typecheck` | `tsc --noEmit` |
+
+## Project structure
+
+```
+src/
+├── app/
+│   ├── page.tsx                 Ask (chat)
+│   ├── sessions/, agenda/, organiser/, judges/   Other views
+│   └── api/query/, api/sessions/                 SSE answer stream; sessions list
+├── components/                  ChatInterface, TokenPanel (trust panel), SessionGrid, AgendaView, OrganiserDashboard, JudgeGuide, Sidebar
+└── lib/
+    ├── corpus/                  JSON data: sessions, speakers, sponsors, schedule
+    ├── sigmap/                  ingest (corpus to chunks), index (TF-IDF retrieval), verify (claim check), types
+    └── gemini/                  Gemini client and prompts
+```
+
+## Using your own conference data
+
+The assistant only knows what is in `src/lib/corpus/`. The bundled data is a small sample (10 sessions, 10 speakers, 4 sponsors, plus the schedule and venue), so the token-reduction figures above grow with the size of your corpus.
+
+1. Replace the four JSON files, keeping the same fields (see `src/lib/corpus/sessions.json` for the session shape: `id`, `title`, `speaker`, `track`, `day`, `start`, `end`, `room`, `abstract`, `tags`).
+2. Restart the server. The index is rebuilt in memory on cold start (`src/lib/sigmap/ingest.ts`).
+
+## Run with Docker
+
+```bash
+docker build -t conferencemap .
+docker run -p 3000:3000 -e GEMINI_API_KEY=<your key> conferencemap
+```
+
+The image uses Next.js `output: 'standalone'` and listens on port 3000.
+
+## Troubleshooting
+
+| Symptom | Likely cause |
+|---|---|
+| Answers fail immediately | `GEMINI_API_KEY` missing or not starting with `AIza` |
+| "Invalid license" watermark on the Grid | Telerik license not activated (see Quick start) |
+| Answers say the information isn't available | The question isn't covered by the corpus; that is the intended behaviour |
+| Follow-ups feel generic or slow | Set `LLM_FOLLOWUPS=false` for instant template follow-ups |
+
 ## Architecture
 
 ![Architecture](architecture.png)
